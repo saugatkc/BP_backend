@@ -4,7 +4,7 @@
   "description": "a hotel finder API",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon --ignore ./public/uploads index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "saugat",
