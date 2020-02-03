@@ -14,10 +14,11 @@ router.post('/signup', (req, res, next) => {
 		return next(err);
         }
         User.create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            fullname:req.body.fullname,
             username: req.body.username,
             password: hash,
+            phone: req.body.phone,
+            email: req.body.email,
             image: req.body.image
         }).then((user) => {
             let token = jwt.sign({ _id: user._id }, process.env.SECRET);
