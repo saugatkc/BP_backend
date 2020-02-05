@@ -58,3 +58,10 @@ router.post('/login', (req, res, next) => {
 router.get('/me', auth.verifyHotel, (req, res, next) => {
     res.json({ _id: req.hotel._id, owner: req.hotel.owner, username: req.hotel.username,phone: req.hotel.phone,email: req.hotel.email, addressDistrict: req.hotel.addressDistrict, addressCity: req.hotel.addressCity, noOfRooms: req.hotel.noOfRooms, available: req.hotel.available,status: req.hotel.status });
 });
+
+router.put('/me', auth.verifyHotel, (req, res, next) => {
+    Hotel.findByIdAndUpdate(req.hotel._id, { $set: req.body }, { new: true })
+        .then((hotel) => {
+            res.json({ _id: hotel._id, owner: hotel.owner, username: hotel.username,phone: hotel.phone,email: hotel.email, addressDistrict: hotel.addressDistrict, addressCity: hotel.addressCity, noOfRooms: hotel.noOfRooms, available: hotel.available,status: hotel.status });
+        }).catch(next);
+});
