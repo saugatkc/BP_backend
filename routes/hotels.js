@@ -21,7 +21,7 @@ router.post('/signup', (req, res, next) => {
             email: req.body.email,
             addressDistrict: req.body.addressDistrict,
             addressCity: req.body.addressCity,
-            noOfRooms:req.body.addressCity,
+            noOfRooms:req.body.noOfRooms,
             available: req.body.available
             
         }).then((hotel) => {
@@ -54,3 +54,7 @@ router.post('/login', (req, res, next) => {
             }
         }).catch(next);
 })
+
+router.get('/me', auth.verifyHotel, (req, res, next) => {
+    res.json({ _id: req.hotel._id, owner: req.hotel.owner, username: req.hotel.username,phone: req.hotel.phone,email: req.hotel.email, addressDistrict: req.hotel.addressDistrict, addressCity: req.hotel.addressCity, noOfRooms: req.hotel.noOfRooms, available: req.hotel.available,status: req.hotel.status });
+});
