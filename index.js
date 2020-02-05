@@ -2,8 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require('morgan');
 const userRouter = require('./routes/users');
+const hotelRouter = require('./routes/hotels');
 const dotenv = require('dotenv').config();
 const uploadRouter = require('./routes/upload');
+
 const auth = require('./auth');
 const cors = require('cors');
 
@@ -23,7 +25,10 @@ mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: t
 
 app.use('/users', userRouter);
 app.use('/upload', uploadRouter);
+app.use('/hotels', hotelRouter);
 app.use(auth.verifyUser);
+
+
 
 
 app.use((err, req, res, next) => {

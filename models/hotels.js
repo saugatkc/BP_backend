@@ -32,11 +32,14 @@ const hotelSchema = new mongoose.Schema({
         type: String
     },
     noOfRooms:{
-        type: Int16Array
+        type: String
     },
-    occupied:{
-        type: Int16Array,
-        default: '0'
+    available:{
+        type: String
+    },
+    status:{
+        type: Boolean,
+        default: false
     }
 
 }, {timestamps: true});
