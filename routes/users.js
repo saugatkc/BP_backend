@@ -50,13 +50,13 @@ router.post('/login', (req, res, next) => {
 })
 
 router.get('/me', auth.verifyUser, (req, res, next) => {
-    res.json({ _id: req.user._id, firstName: req.user.firstName, lastName: req.user.lastName, username: req.user.username, image: req.user.image });
+    res.json({ _id: req.user._id, fullname: req.user.fullname, username: req.user.username,phone: req.user.phone,email: req.user.email, image: req.user.image });
 });
 
 router.put('/me', auth.verifyUser, (req, res, next) => {
     User.findByIdAndUpdate(req.user._id, { $set: req.body }, { new: true })
         .then((user) => {
-            res.json({ _id: user._id, firstName: req.user.firstName, lastName: req.user.lastName, username: user.username, image: user.image });
+            res.json({ _id: user._id, fullname: req.user.fullname, username: user.username,phone: user.phone,email: user.email, image: user.image });
         }).catch(next);
 });
 
