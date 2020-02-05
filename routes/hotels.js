@@ -5,6 +5,8 @@ const Hotel = require('../models/hotels');
 const router = express.Router();
 const auth = require('../auth');
 
+
+//signing new hotel
 router.post('/signup', (req, res, next) => {
     let password = req.body.password;
     bcrypt.hash(password, 10, function (err, hash) {
@@ -34,8 +36,9 @@ router.post('/signup', (req, res, next) => {
     });
 });
 
-module.exports = router;
 
+
+//loging in existing hotel
 router.post('/login', (req, res, next) => {
     Hotel.findOne({ username: req.body.username })
         .then((hotel) => {
@@ -58,10 +61,13 @@ router.post('/login', (req, res, next) => {
         }).catch(next);
 })
 
+
+//getting hotel profile 
 router.get('/me', auth.verifyHotel, (req, res, next) => {
     res.json({ _id: req.hotel._id, owner: req.hotel.owner, hotelname: req.hotel.hotelname,profileimage:req.hotel.profileimage, username: req.hotel.username,phone: req.hotel.phone,email: req.hotel.email, addressDistrict: req.hotel.addressDistrict, addressCity: req.hotel.addressCity, noOfRooms: req.hotel.noOfRooms, available: req.hotel.available,price: req.hotel.price, status: req.hotel.status });
 });
 
+//updating hotel details
 router.put('/me', auth.verifyHotel, (req, res, next) => {
     Hotel.findByIdAndUpdate(req.hotel._id, { $set: req.body }, { new: true })
         .then((hotel) => {
@@ -69,6 +75,8 @@ router.put('/me', auth.verifyHotel, (req, res, next) => {
         }).catch(next);
 });
 
+
+//fetching hotels to guest
 router.route('/hoteldetails')
 .get((req,res,next)=> {
     Hotel.find({ status: true })
@@ -76,3 +84,16 @@ router.route('/hoteldetails')
         res.json(hotel);
     }).catch((err)=>next(err));
 });
+
+//finding hotel requested to admin
+router.route('/hotelrequest')
+.get((req,res,next)=> {
+    Hotel.find({ status: false })
+    .then((hotel)=> {
+        res.json(hotel);
+    }).catch((err)=>next(err));
+});
+
+
+module.exports = router;
+
