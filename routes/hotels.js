@@ -15,6 +15,8 @@ router.post('/signup', (req, res, next) => {
         }
         Hotel.create({
             owner:req.body.owner,
+            hotelname:req.body.hotelname,
+            profileimage:req.body.profileimage,
             username: req.body.username,
             password: hash,
             phone: req.body.phone,
@@ -22,7 +24,8 @@ router.post('/signup', (req, res, next) => {
             addressDistrict: req.body.addressDistrict,
             addressCity: req.body.addressCity,
             noOfRooms:req.body.noOfRooms,
-            available: req.body.available
+            available: req.body.available,
+            price: req.body.price
             
         }).then((hotel) => {
             let token = jwt.sign({ _id: hotel._id }, process.env.SECRET);
@@ -56,12 +59,20 @@ router.post('/login', (req, res, next) => {
 })
 
 router.get('/me', auth.verifyHotel, (req, res, next) => {
-    res.json({ _id: req.hotel._id, owner: req.hotel.owner, username: req.hotel.username,phone: req.hotel.phone,email: req.hotel.email, addressDistrict: req.hotel.addressDistrict, addressCity: req.hotel.addressCity, noOfRooms: req.hotel.noOfRooms, available: req.hotel.available,status: req.hotel.status });
+    res.json({ _id: req.hotel._id, owner: req.hotel.owner, hotelname: req.hotel.hotelname,profileimage:req.hotel.profileimage, username: req.hotel.username,phone: req.hotel.phone,email: req.hotel.email, addressDistrict: req.hotel.addressDistrict, addressCity: req.hotel.addressCity, noOfRooms: req.hotel.noOfRooms, available: req.hotel.available,price: req.hotel.price, status: req.hotel.status });
 });
 
 router.put('/me', auth.verifyHotel, (req, res, next) => {
     Hotel.findByIdAndUpdate(req.hotel._id, { $set: req.body }, { new: true })
         .then((hotel) => {
-            res.json({ _id: hotel._id, owner: hotel.owner, username: hotel.username,phone: hotel.phone,email: hotel.email, addressDistrict: hotel.addressDistrict, addressCity: hotel.addressCity, noOfRooms: hotel.noOfRooms, available: hotel.available,status: hotel.status });
+            res.json({ _id: hotel._id, owner: hotel.owner,hotelname: req.hotel.hotelname,profileimage:req.hotel.profileimage, username: hotel.username,phone: hotel.phone,email: hotel.email, addressDistrict: hotel.addressDistrict, addressCity: hotel.addressCity, noOfRooms: hotel.noOfRooms, available: hotel.available,price: req.hotel.price, status: hotel.status });
         }).catch(next);
+});
+
+router.route('/hoteldetails')
+.get((req,res,next)=> {
+    Hotel.find({ status: true })
+    .then((hotel)=> {
+        res.json(hotel);
+    }).catch((err)=>next(err));
 });
