@@ -32,3 +32,25 @@ router.post('/signup', (req, res, next) => {
 });
 
 module.exports = router;
+
+router.post('/login', (req, res, next) => {
+    Hotel.findOne({ username: req.body.username })
+        .then((hotel) => {
+            if (hotel == null) {
+                let err = new Error('Hotel not found!');
+                err.status = 401;
+                return next(err);
+            } else {
+                bcrypt.compare(req.body.password, hotel.password)
+                    .then((isMatch) => {
+                        if (!isMatch) {
+                            let err = new Error('Password does not match!');
+                            err.status = 401;
+                            return next(err);
+                        }
+                        let token = jwt.sign({ _id: hotel._id }, process.env.SECRET);
+                        res.json({ status: 'Login success!', token: token });
+                    }).catch(next);
+            }
+        }).catch(next);
+})
