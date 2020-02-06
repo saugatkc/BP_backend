@@ -201,5 +201,45 @@ router.route('/:id/features')
         .catch(next);
 });
 
+//features (viewing editing and deleting a feature of a hotel)
+router.route('/:id/features/:fid')
+.get((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            let feature = hotel.features.id(req.params.fid);
+            res.json(feature);
+        })
+        .catch(next);
+})
+.post((req, res) => {
+    res.statusCode = 405;
+        res.json({ message: "Method not allowed" });
+})
+.put((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            let feature = hotel.features.id(req.params.fid);
+            feature.feature = req.body.feature;
+            hotel.save()
+                .then(() => {
+                    res.json(feature);
+                })
+                .catch(next);
+        })
+        .catch(next);
+})
+.delete((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            hotel.features.pull(req.params.fid);
+            hotel.save()
+                .then((hotel) => {
+                    res.json(hotel.features);
+                })
+                .catch(next);
+        })
+        .catch(next);
+});
+
 module.exports = router;
 
