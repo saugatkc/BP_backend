@@ -132,6 +132,36 @@ router.route('/:id/gallery')
         .catch(next);
 });
 
+//gallery (viewing image in gallery and deleting it)
+router.route('/:id/gallery/:iid')
+.get((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            let image = hotel.images.id(req.params.iid);
+            res.json(image);
+        })
+        .catch(next);
+})
+.post((req, res) => {
+    res.statusCode = 405;
+        res.json({ message: "Method not allowed" });
+})
+.put((req, res) => {
+    res.statusCode = 405;
+    res.json({ message: "Method not allowed" });
+})
+.delete((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            hotel.images.pull(req.params.iid);
+            hotel.save()
+                .then((hotel) => {
+                    res.json(hotel.images);
+                })
+                .catch(next);
+        })
+        .catch(next);
+});
 
 module.exports = router;
 
