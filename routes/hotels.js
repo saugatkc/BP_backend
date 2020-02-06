@@ -6,7 +6,7 @@ const router = express.Router();
 const auth = require('../auth');
 
 
-//signing new hotel
+//Hotels add and view
 router.post('/signup', (req, res, next) => {
     let password = req.body.password;
     bcrypt.hash(password, 10, function (err, hash) {
@@ -92,6 +92,44 @@ router.route('/hotelrequest')
     .then((hotel)=> {
         res.json(hotel);
     }).catch((err)=>next(err));
+});
+
+//gallery (adding fetching and empting images in gallery)
+router.route('/:id/gallery')
+.get((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            res.json(hotel.images);
+        })
+        .catch(next);
+})
+.post((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            hotel.images.push(req.body);
+            hotel.save()
+                .then((hotel) => {
+                    res.json(hotel.images);
+                })
+                .catch(next);
+        })
+        .catch(next);
+})
+.put((req, res) => {
+    res.statusCode = 405;
+    res.json({ message: "Method not allowed" });
+})
+.delete((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            hotel.images = [];
+            hotel.save()
+                .then((hotel) => {
+                    res.json(hotel.images);
+                })
+                .catch(next);
+        })
+        .catch(next);
 });
 
 
