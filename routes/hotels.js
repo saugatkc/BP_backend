@@ -71,7 +71,7 @@ router.get('/me', auth.verifyHotel, (req, res, next) => {
 router.put('/me', auth.verifyHotel, (req, res, next) => {
     Hotel.findByIdAndUpdate(req.hotel._id, { $set: req.body }, { new: true })
         .then((hotel) => {
-            res.json({ _id: hotel._id, owner: hotel.owner,hotelname: req.hotel.hotelname,profileimage:req.hotel.profileimage, username: hotel.username,phone: hotel.phone,email: hotel.email, addressDistrict: hotel.addressDistrict, addressCity: hotel.addressCity, noOfRooms: hotel.noOfRooms, available: hotel.available,price: req.hotel.price, status: hotel.status });
+            res.json({ _id: hotel._id, owner: hotel.owner,hotelname: req.hotel.hotelname,profileimage:req.hotel.profileimage, username: hotel.username,phone: hotel.phone,email: hotel.email, addressDistrict: hotel.addressDistrict, addressCity: hotel.addressCity,latitude: hotel.latitude, longitude: hotel.longitude, noOfRooms: hotel.noOfRooms, available: hotel.available,price: req.hotel.price, status: hotel.status });
         }).catch(next);
 });
 

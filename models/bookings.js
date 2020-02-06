@@ -15,7 +15,8 @@ const bookingSchema = new mongoose.Schema({
         ref: 'User'
     },
     hotel:{
-       type:String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     status:{
         type: String,

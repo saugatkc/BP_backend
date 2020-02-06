@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 
+const savedSchema = new mongoose.Schema({
+    hotel:{
+        type:String
+    }
+});
+
 const userSchema = new mongoose.Schema({
     fullname:{
         type: String,
@@ -28,6 +34,7 @@ const userSchema = new mongoose.Schema({
     image:{
         type:String
     },
+    saved:[hotel],
     admin: {
         type: Boolean,
         default: false
