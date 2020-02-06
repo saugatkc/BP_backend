@@ -163,5 +163,43 @@ router.route('/:id/gallery/:iid')
         .catch(next);
 });
 
+//features (adding fetching and empting features of a hotel)
+router.route('/:id/features')
+.get((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            res.json(hotel.features);
+        })
+        .catch(next);
+})
+.post((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            hotel.features.push(req.body);
+            hotel.save()
+                .then((hotel) => {
+                    res.json(hotel.features);
+                })
+                .catch(next);
+        })
+        .catch(next);
+})
+.put((req, res) => {
+    res.statusCode = 405;
+    res.json({ message: "Method not allowed" });
+})
+.delete((req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            hotel.features = [];
+            hotel.save()
+                .then((hotel) => {
+                    res.json(hotel.features);
+                })
+                .catch(next);
+        })
+        .catch(next);
+});
+
 module.exports = router;
 
