@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     image:{
         type:String
     },
-    saved:[hotel],
+    saved:[savedSchema],
     admin: {
         type: Boolean,
         default: false

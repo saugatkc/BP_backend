@@ -76,6 +76,8 @@ router.put('/me', auth.verifyHotel, (req, res, next) => {
 });
 
 
+
+
 //fetching hotels to guest
 router.route('/hoteldetails')
 .get((req,res,next)=> {
@@ -92,6 +94,13 @@ router.route('/hotelrequest')
     .then((hotel)=> {
         res.json(hotel);
     }).catch((err)=>next(err));
+});
+
+router.get('/:id',(req, res, next) => {
+    Hotel.findById(req.params.id)
+        .then((hotel) => {
+            res.json(hotel);
+        }).catch((err)=>next(err));
 });
 
 //gallery (adding fetching and empting images in gallery)

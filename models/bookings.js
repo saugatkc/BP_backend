@@ -8,7 +8,6 @@ const bookingSchema = new mongoose.Schema({
     checkout:{
         type: String,
         required: true,
-        unique: true
     },
     guest:{
         type: mongoose.Schema.Types.ObjectId,
@@ -16,11 +15,14 @@ const bookingSchema = new mongoose.Schema({
     },
     hotel:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Hotel'
     },
     status:{
         type: String,
-        required: true
+        default:"booked"
+    },
+    idimage:{
+        type:String
     }
 }, {timestamps: true});
 

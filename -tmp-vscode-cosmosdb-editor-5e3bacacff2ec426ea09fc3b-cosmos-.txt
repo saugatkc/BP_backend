@@ -1,0 +1,1 @@
+/tmp/vscode-cosmosdb-editor/5e3bacacff2ec426ea09fc3b-cosmos-document.json
