@@ -18,13 +18,39 @@ router.post('/booking', (req, res, next) => {
         }).catch(next);
 });
 
-//fetching hotels to guest
-router.route('/bookingdetais')
+// //fetching hotels to guest
+// router.route('/bookingdetais')
+// .get((req,res,next)=> {
+//     Booking.find({ status: "booked" })
+//     .then((booking)=> {
+//         res.json(booking);
+//     }).catch((err)=>next(err));
+// });
+
+//fetching user their current booking
+router.route('/booked', auth.verifyUser)
 .get((req,res,next)=> {
-    Booking.find({ status: "booked" })
-    .then((booking)=> {
-        res.json(booking);
+    Booking.find({ status: "booked",guest: req.body.id })
+    .then((bookings)=> {
+        res.json(bookings);
     }).catch((err)=>next(err));
 });
 
+//fetching user their completed stays
+router.route('/completed', auth.verifyUser)
+.get((req,res,next)=> {
+    Booking.find({ status: "completed",guest: req.body.id })
+    .then((bookings)=> {
+        res.json(bookings);
+    }).catch((err)=>next(err));
+});
+
+//fetching user their cancled stays
+router.route('/completed', auth.verifyUser)
+.get((req,res,next)=> {
+    Booking.find({ status: "cancled",guest: req.body.id })
+    .then((bookings)=> {
+        res.json(bookings);
+    }).catch((err)=>next(err));
+});
 module.exports = router;
