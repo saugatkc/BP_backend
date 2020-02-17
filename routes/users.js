@@ -60,4 +60,101 @@ router.put('/me', auth.verifyUser, (req, res, next) => {
         }).catch(next);
 });
 
+
+router.route('/:id/saved')
+.get((req, res, next) => {
+    User.findById(req.params.id)
+    .populate('saved')
+        .then((user) => {
+            res.json(user.saved);
+        })
+        .catch(next);
+})
+.delete((req, res, next) => {
+    User.findById(req.params.id)
+        .then((user) => {
+            user.saved = [];
+            user.save()
+                .then((user) => {
+                    res.json(user.saved);
+                })
+                .catch(next);
+        })
+        .catch(next);
+});
+
+
+
+
+//saved (adding hotels and empting in saved hotels)
+router.route('/:id/saved/:hid')
+.get((req, res, next) => {
+    User.findById(req.params.id)
+        .then((user) => {
+            res.json(user.saved);
+        })
+        .catch(next);
+})
+.post((req, res, next) => {
+    User.findById(req.params.id)
+        .then((user) => {
+            user.saved.push(req.params.hid);
+            user.save()
+                .then((user) => {
+                    res.json(user.saved);
+                })
+                .catch(next);
+        })
+        .catch(next);
+})
+.put((req, res) => {
+    res.statusCode = 405;
+    res.json({ message: "Method not allowed" });
+})
+.delete((req, res, next) => {
+    User.findById(req.params.id)
+        .then((user) => {
+            user.saved.pull(req.params.hid);
+            user.save()
+                .then((user) => {
+                    res.json(user.saved);
+                })
+                .catch(next);
+        })
+        .catch(next);
+});
+
+
+// //saved (viewing saved hotel and deleting it)
+// router.route('/:id/saved/:sid')
+// .get((req, res, next) => {
+//     User.findById(req.params.id)
+//         .then((user) => {
+//             let hotel = user.saved.id(req.params.sid);
+//             res.json(hotel);
+//         })
+//         .catch(next);
+// })
+// .post((req, res) => {
+//     res.statusCode = 405;
+//         res.json({ message: "Method not allowed" });
+// })
+// .put((req, res) => {
+//     res.statusCode = 405;
+//     res.json({ message: "Method not allowed" });
+// })
+// .delete((req, res, next) => {
+//     User.findById(req.params.id)
+//         .then((user) => {
+//             user.saved.pull(req.params.sid);
+//             user.save()
+//                 .then((user) => {
+//                     res.json(user.saved);
+//                 })
+//                 .catch(next);
+//         })
+//         .catch(next);
+// });
+
+
 module.exports = router;

@@ -64,7 +64,7 @@ router.post('/login', (req, res, next) => {
 
 //getting hotel profile 
 router.get('/me', auth.verifyHotel, (req, res, next) => {
-    res.json({ _id: req.hotel._id, owner: req.hotel.owner, hotelname: req.hotel.hotelname,profileimage:req.hotel.profileimage, username: req.hotel.username,phone: req.hotel.phone,email: req.hotel.email, addressDistrict: req.hotel.addressDistrict, addressCity: req.hotel.addressCity, noOfRooms: req.hotel.noOfRooms, available: req.hotel.available,price: req.hotel.price, status: req.hotel.status });
+    res.json({ _id: req.hotel._id, owner: req.hotel.owner, hotelname: req.hotel.hotelname,profileimage:req.hotel.profileimage, username: req.hotel.username,phone: req.hotel.phone,email: req.hotel.email, addressDistrict: req.hotel.addressDistrict, addressCity: req.hotel.addressCity,latitude: req.hotel.latitude,longitude: req.hotel.longitude, noOfRooms: req.hotel.noOfRooms, available: req.hotel.available,price: req.hotel.price, status: req.hotel.status });
 });
 
 //updating hotel details
@@ -106,7 +106,7 @@ router.get('/:id',(req, res, next) => {
 //gallery (adding fetching and empting images in gallery)
 router.route('/:id/gallery')
 .get((req, res, next) => {
-    Hotel.findById(req.params.id)
+    Hotel.findById(req.holte._id)
         .then((hotel) => {
             res.json(hotel.images);
         })
@@ -173,16 +173,16 @@ router.route('/:id/gallery/:iid')
 });
 
 //features (adding fetching and empting features of a hotel)
-router.route('/:id/features')
-.get((req, res, next) => {
-    Hotel.findById(req.params.id)
+router.route('/features')
+.get(auth.verifyHotel, (req, res, next) => {
+    Hotel.findById(req.hotel._id)
         .then((hotel) => {
             res.json(hotel.features);
         })
         .catch(next);
 })
-.post((req, res, next) => {
-    Hotel.findById(req.params.id)
+.post(auth.verifyHotel, (req, res, next) => {
+    Hotel.findById(req.hotel._id)
         .then((hotel) => {
             hotel.features.push(req.body);
             hotel.save()
@@ -197,8 +197,8 @@ router.route('/:id/features')
     res.statusCode = 405;
     res.json({ message: "Method not allowed" });
 })
-.delete((req, res, next) => {
-    Hotel.findById(req.params.id)
+.delete(auth.verifyHotel, (req, res, next) => {
+    Hotel.findById(req.hotel._id)
         .then((hotel) => {
             hotel.features = [];
             hotel.save()
@@ -211,9 +211,9 @@ router.route('/:id/features')
 });
 
 //features (viewing editing and deleting a feature of a hotel)
-router.route('/:id/features/:fid')
-.get((req, res, next) => {
-    Hotel.findById(req.params.id)
+router.route('/features/:fid')
+.get(auth.verifyHotel, (req, res, next) => {
+    Hotel.findById(req.hotel._id)
         .then((hotel) => {
             let feature = hotel.features.id(req.params.fid);
             res.json(feature);
@@ -224,8 +224,8 @@ router.route('/:id/features/:fid')
     res.statusCode = 405;
         res.json({ message: "Method not allowed" });
 })
-.put((req, res, next) => {
-    Hotel.findById(req.params.id)
+.put(auth.verifyHotel, (req, res, next) => {
+    Hotel.findById(req.hotel._id)
         .then((hotel) => {
             let feature = hotel.features.id(req.params.fid);
             feature.feature = req.body.feature;
@@ -237,8 +237,8 @@ router.route('/:id/features/:fid')
         })
         .catch(next);
 })
-.delete((req, res, next) => {
-    Hotel.findById(req.params.id)
+.delete(auth.verifyHotel, (req, res, next) => {
+    Hotel.findById(req.hotel._id)
         .then((hotel) => {
             hotel.features.pull(req.params.fid);
             hotel.save()
@@ -249,6 +249,25 @@ router.route('/:id/features/:fid')
         })
         .catch(next);
 });
+
+router.route('/features/get/b')
+.get(auth.verifyHotel, (req, res, next) => {
+    Hotel.findById(req.hotel._id)
+        .then((hotel) => {
+            res.json(hotel.features);
+        })
+        .catch(next);
+});
+
+//gallery (adding fetching and empting images in gallery)
+router.route('/gallery/hotel')
+.get(auth.verifyHotel, (req, res, next) => {
+    Hotel.findById(req.hotel._id)
+        .then((hotel) => {
+            res.json(hotel.images);
+        })
+        .catch(next);
+})
 
 module.exports = router;
 

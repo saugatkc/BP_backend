@@ -41,15 +41,15 @@ const hotelSchema = new mongoose.Schema({
     },
     email:{
         type: String,
-        required: true
+       
     },
     addressDistrict:{
         type: String,
-        required: true
+      
     },
     addressCity:{
         type: String,
-        required: true
+       
     },
     latitude:{
         type:String
@@ -59,15 +59,15 @@ const hotelSchema = new mongoose.Schema({
     },
     noOfRooms:{
         type: String,
-        required: true
+        
     },
     available:{
         type: String,
-        required: true
+       
     },
     price:{
         type:String,
-        required: true
+        
     },
     status:{
         type: Boolean,

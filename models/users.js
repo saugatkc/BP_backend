@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
-const savedSchema = new mongoose.Schema({
-    hotel:{
-        type:String
-    }
-});
+// const savedSchema = new mongoose.Schema({
+//     _id:{
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'Hotel'
+//     }
+// });
 
 const userSchema = new mongoose.Schema({
     fullname:{
@@ -34,7 +35,9 @@ const userSchema = new mongoose.Schema({
     image:{
         type:String
     },
-    saved:[savedSchema],
+    saved:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Hotel'}],
     admin: {
         type: Boolean,
         default: false

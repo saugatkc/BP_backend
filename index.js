@@ -15,6 +15,7 @@ const app = express();
 app.use(morgan('tiny'));
 app.use(express.json());
 app.options('*', cors());
+app.use(cors());
 app.use(express.urlencoded({extended: true }));
 
 app.use(express.static(__dirname + "/public"));
@@ -29,6 +30,7 @@ app.use('/upload', uploadRouter);
 app.use('/hotels', hotelRouter);
 app.use('/bookings', bookingRouter);
 app.use(auth.verifyUser);
+app.use(auth.verifyHotel);
 
 
 
