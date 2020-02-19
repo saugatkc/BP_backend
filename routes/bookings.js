@@ -16,14 +16,6 @@ router.post('/booking', (req, res, next) => {
         }).catch(next);
 });
 
-// //fetching hotels to guest
-// router.route('/bookingdetais')
-// .get((req,res,next)=> {
-//     Booking.find({ status: "booked" })
-//     .then((booking)=> {
-//         res.json(booking);
-//     }).catch((err)=>next(err));
-// });
 
 //fetching user their current booking
 router.route('/:id/booking')
@@ -56,6 +48,7 @@ router.route('/:id/canceled')
     }).catch((err) => next(err));
 });
 
+//Updating booking status and deleting the booking
 router.route('/:id')
 .put((req, res, next) => {
     Booking.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
@@ -63,14 +56,41 @@ router.route('/:id')
             if (reply == null) throw new Error("Booking not found!");
             res.json(reply);
         }).catch(next);
-});
+})
+.delete((req,res, next)=>{
+    Booking.findByIdAndDelete(req.params.id)
+    .then((booking) => {
+        if (booking == null) throw new Error("booking not found!");
+                res.json(booking);
+    }).catch((err) => next(err));
+})
 
-router.get('/hotel/hotelbooking',  auth.verifyHotel, (req,res,next)=> {
-    Booking.find({ hotel: req.hotel._id, status:"booked" })
+//fetching hotel their all completed stays
+router.get('/hotel/hotelbooking/completed',  auth.verifyHotel, (req,res,next)=> {
+    Booking.find({ hotel: req.hotel._id, status:"completed"})
     .populate('guest')
     .then((booking) => {
         res.json(booking);
     }).catch((err) => next(err));
 });
+
+//fetching hotel their all bookings
+router.get('/hotel/hotelbooking/booked',  auth.verifyHotel, (req,res,next)=> {
+    Booking.find({ hotel: req.hotel._id, status:"booked"})
+    .populate('guest')
+    .then((booking) => {
+        res.json(booking);
+    }).catch((err) => next(err));
+});
+
+//fetching hotel their all staying guest
+router.get('/hotel/hotelbooking/staying',  auth.verifyHotel, (req,res,next)=> {
+    Booking.find({ hotel: req.hotel._id, status:"checkedin"})
+    .populate('guest')
+    .then((booking) => {
+        res.json(booking);
+    }).catch((err) => next(err));
+});
+
 
 module.exports = router;
