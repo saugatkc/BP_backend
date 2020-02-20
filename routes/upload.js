@@ -19,6 +19,14 @@ const hotelstorage = multer.diskStorage({
     }
 });
 
+const gallerystorage = multer.diskStorage({
+    destination: "./public/gallery",
+    filename: (req, file, callback) => {
+        let ext = path.extname(file.originalname);
+        callback(null, `${file.fieldname}-${Date.now()}${ext}`);
+    }
+});
+
 const imageFileFilter = (req, file, cb) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
         return cb(new Error("You can upload only image files!"), false);
@@ -47,4 +55,13 @@ router.route('/hotel')
             res.json(req.file);
         });   
 
+const uploadgallery = multer({
+            storage: gallerystorage,
+            fileFilter: imageFileFilter
+        })
+        
+ router.route('/hotel/gallery')
+            .post(uploadgallery.single('imageFile'), (req, res) => {
+                res.json(req.file);
+            });   
 module.exports = router;

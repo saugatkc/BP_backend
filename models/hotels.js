@@ -37,7 +37,6 @@ const hotelSchema = new mongoose.Schema({
     },
     phone:{
         type: String,
-        required: true
     },
     email:{
         type: String,
@@ -71,7 +70,7 @@ const hotelSchema = new mongoose.Schema({
     },
     status:{
         type: Boolean,
-        default: false
+        default: true
     },
     images: [imagesSchema],
     
