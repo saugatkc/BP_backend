@@ -1,11 +1,5 @@
 const mongoose = require('mongoose');
 
-// const savedSchema = new mongoose.Schema({
-//     _id:{
-//         type: mongoose.Schema.Types.ObjectId,
-//         ref: 'Hotel'
-//     }
-// });
 
 const userSchema = new mongoose.Schema({
     fullname:{
@@ -25,11 +19,9 @@ const userSchema = new mongoose.Schema({
     },
     phone:{
         type: String,
-        required: true
     },
     email:{
         type: String,
-        required: true
     },
 
     image:{
